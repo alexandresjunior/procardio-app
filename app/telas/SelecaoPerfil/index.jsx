@@ -1,8 +1,11 @@
+import { useNavigation } from "@react-navigation/native";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import logo from "../../../assets/images/procardio_logo_vertical_vermelho.png";
 
 export default function SelecaoPerfil() {
+    const navigation = useNavigation();
+
     return (
         <SafeAreaView style={estilos.safeArea}>
             <View style={estilos.container}>
@@ -13,11 +16,11 @@ export default function SelecaoPerfil() {
 
                 {/* Espaço para os botões */}
                 <View style={estilos.botoesContainer}>
-                    <TouchableOpacity style={estilos.botaoPrimario}>
+                    <TouchableOpacity style={estilos.botaoPrimario} onPress={() => navigation.navigate("Login", { perfil: "profissional" })}>
                         <Text style={estilos.textoBotaoPrimario}>Sou Profissional de Saúde</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={estilos.botaoSecundario}>
+                    <TouchableOpacity style={estilos.botaoSecundario} onPress={() => navigation.navigate("Login", { perfil: "paciente" })}>
                         <Text style={estilos.textoBotaoSecundario}>Sou Paciente</Text>
                     </TouchableOpacity>
                 </View>

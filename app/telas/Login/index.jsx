@@ -1,67 +1,118 @@
-import { Ionicons } from "@expo/vector-icons";
+import { FontAwesome5, Ionicons } from "@expo/vector-icons";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import {
-    Image,
-    KeyboardAvoidingView,
-    Platform,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import logo from "../../../assets/images/procardio_logo_vertical_vermelho.png";
+import googleLogo from "../../../assets/images/google_logo.png";
+import logoBranco from "../../../assets/images/procardio_logo_vertical_branco.png";
+import logoVermelho from "../../../assets/images/procardio_logo_vertical_vermelho.png";
 
 export default function Login() {
-    return (
-        <SafeAreaView style={estilos.safeArea}>
-            <KeyboardAvoidingView 
-                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                style={estilos.container}
-            >
-                <TouchableOpacity style={estilos.backButton}>
-                    <Ionicons name="chevron-back" size={28} color={"#0063c7"} />
-                </TouchableOpacity>
+  const navigation = useNavigation();
+  const route = useRoute();
 
-                <View style={estilos.logoContainer}>
-                    <Image source={logo} style={estilos.logo} resizeMode="contain" />
-                </View>
+  const perfil = route.params?.perfil || "paciente";
+  const ehProfissional = perfil === "profissional";
 
-                <View style={estilos.formContainer}>
-                    <View style={estilos.inputGroup}>
-                        <Text style={estilos.label}>E-mail</Text>
-                        <TextInput 
-                            style={estilos.input} 
-                            placeholder="exemplo@123.com"
-                            placeholderTextColor="#ADADAD"
-                            keyboardType="email-address"
-                            autoCapitalize="none"
-                        />
-                    </View>
+  return (
+    <SafeAreaView style={[estilos.safeArea, ehProfissional && estilos.safeAreaPro]}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={estilos.container}
+      >
+        <ScrollView
+          style={estilos.scrollContainer}
+          showsVerticalScrollIndicator={false}
+        >
+          <TouchableOpacity style={estilos.backButton} onPress={() => navigation.goBack()}>
+            <Ionicons name="chevron-back" size={28} color={ehProfissional ? "#FFF" : "#0063c7"} />
+          </TouchableOpacity>
 
-                    <View style={estilos.inputGroup}>
-                        <Text style={estilos.label}>Senha</Text>
-                        <TextInput 
-                            style={estilos.input} 
-                            placeholder="Digite pelo menos 6 caracteres"
-                            placeholderTextColor="#ADADAD"
-                            secureTextEntry
-                        />
-                    </View>
+          <View style={estilos.logoContainer}>
+            <Image source={ehProfissional ? logoBranco : logoVermelho} style={estilos.logo} resizeMode="contain" />
+          </View>
 
-                    <TouchableOpacity style={estilos.forgotPassword}>
-                        <Text style={estilos.forgotPasswordText}>Esqueci a senha</Text>
-                    </TouchableOpacity>
-                </View>
-            </KeyboardAvoidingView>
-        </SafeAreaView>
-    )
+          <View style={estilos.formContainer}>
+            <View style={estilos.inputGroup}>
+              <Text style={[estilos.label, ehProfissional && estilos.textWhite]}>E-mail</Text>
+              <TextInput
+                style={[estilos.input, ehProfissional && estilos.inputPro]}
+                placeholder="exemplo@123.com"
+                placeholderTextColor={ehProfissional ? "#FFF" : "#ADADAD"}
+                keyboardType="email-address"
+                autoCapitalize="none"
+              />
+            </View>
+
+            <View style={estilos.inputGroup}>
+              <Text style={[estilos.label, ehProfissional && estilos.textWhite]}>Senha</Text>
+              <TextInput
+                style={[estilos.input, ehProfissional && estilos.inputPro]}
+                placeholder="Digite pelo menos 6 caracteres"
+                placeholderTextColor={ehProfissional ? "#FFF" : "#ADADAD"}
+                secureTextEntry
+              />
+            </View>
+
+            <TouchableOpacity style={estilos.forgotPassword}>
+              <Text style={[estilos.forgotPasswordText, ehProfissional && estilos.textWhite]}>Esqueci a senha</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={estilos.loginButton}>
+              <Text style={estilos.loginButtonText}>Entrar</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={estilos.registerLink}>
+              <Text style={[estilos.registerLinkText, ehProfissional && estilos.textWhite]}>Quero me cadastrar</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={estilos.socialContainer}>
+            <TouchableOpacity style={estilos.googleButton}>
+              <Image source={googleLogo} style={estilos.socialIconImage} />
+              <Text style={estilos.googleButtonText}>Entrar com Google</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={estilos.facebookButton}>
+              <FontAwesome5
+                name="facebook-f"
+                color="#FFF"
+                size={20}
+                style={estilos.socialIcon}
+              />
+              <Text style={estilos.facebookButtonText}>Entrar com Facebook</Text>
+            </TouchableOpacity>
+          </View>
+
+          {!ehProfissional && (
+            <View style={estilos.footerContainer}>
+              <Text style={estilos.footerText}>Fazer login como</Text>
+              <TouchableOpacity onPress={() => navigation.navigate("Login", { perfil: "profissional" })}>
+                <Text style={estilos.footerTextBold}>Profissional</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
+  )
 }
 
 const estilos = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: '#FFFFFF',
+  },
+  safeAreaPro: {
+    backgroundColor: '#003d7a',
   },
   container: {
     flex: 1,
@@ -159,7 +210,7 @@ const estilos = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#3b5998', 
+    backgroundColor: '#3b5998',
     paddingVertical: 14,
     borderRadius: 8,
     marginBottom: 40,
@@ -176,6 +227,10 @@ const estilos = StyleSheet.create({
   footerContainer: {
     alignItems: 'center',
     marginTop: 'auto',
+    marginBottom: 32,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 4
   },
   footerText: {
     color: '#555',
@@ -184,5 +239,12 @@ const estilos = StyleSheet.create({
   footerTextBold: {
     fontWeight: 'bold',
     color: '#0063c7',
+  },
+  textWhite: {
+    color: '#FFF',
+  },
+  inputPro: {
+    borderBottomColor: "#FFF",
+    color: "#FFF"
   },
 });

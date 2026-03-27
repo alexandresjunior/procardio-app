@@ -1,5 +1,5 @@
 import { Feather, FontAwesome, Ionicons } from "@expo/vector-icons";
-import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const RECOMENDACOES = [
@@ -14,55 +14,24 @@ const NOTAS = [1, 2, 3, 4, 5];
 export default function HomePaciente() {
     return (
         <SafeAreaView style={estilos.container}>
-            <ScrollView
-                contentContainerStyle={estilos.scrollContent}
-                showsVerticalScrollIndicator={false}
-            >
-                <View style={estilos.header}>
-                    <TouchableOpacity>
-                        <Feather name="menu" size={28} color={'#333'} />
-                    </TouchableOpacity>
-                    <Text style={estilos.greetingText}>
-                        Bem-vindo, <Text style={estilos.greetingName}>Victor</Text>
-                    </Text>
-                    <Image
-                        source={{ uri: 'https://i.pravatar.cc/150?img=12' }}
-                        style={estilos.profilePic}
-                    />
-                </View>
-
-                <Text style={estilos.sectionTitle}>Em busca de um profissional?</Text>
-                <View style={estilos.searchContainer}>
-                    <Ionicons
-                        name="search"
-                        size={20}
-                        color={"#0063C7"}
-                        style={estilos.searchIcon}
-                    />
-                    <TextInput
-                        style={estilos.searchInput}
-                        placeholder="Encontre sua especialidade desejada"
-                        placeholderTextColor={"#999"}
-                    />
-                </View>
-
-                <Text style={estilos.subTitle}>Recomendações</Text>
-
-                {RECOMENDACOES.map((recomendacao) => (
-                    <View style={estilos.card} key={recomendacao.id}>
-                        <Image style={estilos.cardImage} source={{ uri: recomendacao.avatar }} />
+            <FlatList
+                data={RECOMENDACOES}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => (
+                    <View style={estilos.card}>
+                        <Image style={estilos.cardImage} source={{ uri: item.avatar }} />
                         <View style={estilos.cardInfo}>
                             <View style={estilos.cardHeader}>
-                                <Text style={estilos.cardName}>{recomendacao.nome}</Text>
+                                <Text style={estilos.cardName}>{item.nome}</Text>
                                 <TouchableOpacity>
-                                    <Ionicons 
-                                        name={recomendacao.favorito ? "heart" : "heart-outline"}
-                                        size={20} 
-                                        color={'#FF3B30'} 
+                                    <Ionicons
+                                        name={item.favorito ? "heart" : "heart-outline"}
+                                        size={20}
+                                        color={'#FF3B30'}
                                     />
                                 </TouchableOpacity>
                             </View>
-                            <Text style={estilos.cardSpecialty}>{recomendacao.especialidade}</Text>
+                            <Text style={estilos.cardSpecialty}>{item.especialidade}</Text>
                             <View style={estilos.ratingContainer}>
                                 {NOTAS.map((nota) => (
                                     <FontAwesome
@@ -73,21 +42,55 @@ export default function HomePaciente() {
                                     />
                                 ))}
                                 <Text style={estilos.ratingText}>
-                                    {recomendacao.avaliacao} | {recomendacao.reviews} avaliações
+                                    {item.avaliacao} | {item.reviews} avaliações
                                 </Text>
                             </View>
                         </View>
                     </View>
-                ))}
+                )}
+                ListHeaderComponent={() => (
+                    <>
+                        <View style={estilos.header}>
+                            <TouchableOpacity>
+                                <Feather name="menu" size={28} color={'#333'} />
+                            </TouchableOpacity>
+                            <Text style={estilos.greetingText}>
+                                Bem-vindo, <Text style={estilos.greetingName}>Victor</Text>
+                            </Text>
+                            <Image
+                                source={{ uri: 'https://i.pravatar.cc/150?img=12' }}
+                                style={estilos.profilePic}
+                            />
+                        </View>
 
-            </ScrollView>
+                        <Text style={estilos.sectionTitle}>Em busca de um profissional?</Text>
+                        <View style={estilos.searchContainer}>
+                            <Ionicons
+                                name="search"
+                                size={20}
+                                color={"#0063C7"}
+                                style={estilos.searchIcon}
+                            />
+                            <TextInput
+                                style={estilos.searchInput}
+                                placeholder="Encontre sua especialidade desejada"
+                                placeholderTextColor={"#999"}
+                            />
+                        </View>
+
+                        <Text style={estilos.subTitle}>Recomendações</Text>
+                    </>
+                )}
+                contentContainerStyle={estilos.listContent}
+                showsVerticalScrollIndicator={false}
+            />
         </SafeAreaView>
     );
 }
 
 const estilos = StyleSheet.create({
     container: { flex: 1, backgroundColor: '#FAFAFA' },
-    scrollContent: { padding: 20, paddingBottom: 100 },
+    listContent: { padding: 20, paddingBottom: 30 },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 30, marginTop: 10 },
     greetingText: { fontSize: 20, color: '#0056b3', textAlign: 'center' },
     greetingName: { fontWeight: 'bold' },

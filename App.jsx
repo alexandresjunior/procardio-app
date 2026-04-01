@@ -6,6 +6,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import MenuLateral from "./app/componentes/MenuLateral";
 import HomePaciente from "./app/telas/HomePaciente";
 import Login from "./app/telas/Login";
+import ResultadosBusca from "./app/telas/ResultadosBusca";
 import SelecaoPerfil from "./app/telas/SelecaoPerfil";
 
 const Stack = createStackNavigator();
@@ -32,7 +33,8 @@ function TabNavigator() {
        })}
     >
       <Tab.Screen name="HomePaciente" component={HomePaciente} options={{ tabBarLabel: "Home" }} />
-      <Tab.Screen name="Mensagens" component={HomePaciente} />
+      {/* TEMPORÁRIO */}
+      <Tab.Screen name="Mensagens" component={ResultadosBusca} />
       <Tab.Screen name="Consultas" component={HomePaciente} />
       <Tab.Screen name="Favoritos" component={HomePaciente} />
     </Tab.Navigator>

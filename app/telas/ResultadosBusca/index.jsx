@@ -1,6 +1,6 @@
-import { Ionicons } from "@expo/vector-icons";
+import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "expo-router";
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -27,9 +27,64 @@ export default function ResultadosBusca() {
                 data={RESULTADOS}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
-                    <View style={estilos.card}>
-                        {/* TODO: DEFINIR CONTEÚDO DA VIEW */}
-                    </View>
+                    <TouchableOpacity style={estilos.card}>
+                        <View style={estilos.cardTop}>
+                            <Image style={estilos.cardImage} source={{ uri: item.avatar }} />
+
+                            <View style={estilos.cardInfo}> 
+                                <View style={estilos.cardHeaderRow}>
+                                    <Text style={estilos.cardName}>{item.nome}</Text>
+                                    <TouchableOpacity>
+                                        <Ionicons 
+                                            name={item.favorito ? "heart" : "heart-outline"} 
+                                            color={"#FF3B30"} 
+                                            size={20}
+                                        />
+                                    </TouchableOpacity>
+                                </View>
+
+                                <Text style={estilos.cardSpecialty}>{item.especialidade}</Text>
+
+                                <View style={estilos.ratingContainer}>
+                                    { [1, 2, 3, 4, 5].map((estrela) => (
+                                        <FontAwesome key={estrela} name="star" size={12} color={"#FFD700"} />
+                                    )) }
+                                    <Text style={estilos.ratingText}>{item.avaliacao} | {item.reviews} avaliações</Text>
+                                </View>
+
+                                <View style={estilos.detailsContainer}>
+                                    <Text style={estilos.detailText}>
+                                        <Text style={estilos.detailLabel}>Forma de Pagamento: </Text>
+                                        {item.pagamento}
+                                    </Text>
+                                    <Text style={estilos.detailText}>
+                                        <Text style={estilos.detailLabel}>Consulta: </Text>
+                                        {item.consulta}
+                                    </Text>
+                                    <Text style={estilos.detailText}>{item.modalidade}</Text>
+                                </View>
+                            </View>
+                        </View>
+
+                        <View style={estilos.availabilityContainer}>
+                            <Text style={estilos.dateText}>{item.data}</Text>
+                            <View style={estilos.timeSlotsRow}>
+                                {
+                                    item.horarios.length > 0 ? (
+                                        item.horarios.map((horario, idx) => (
+                                            <Text style={estilos.timeSlot} key={idx}>
+                                                <Text style={estilos.timeSlotText}>{horario}</Text>
+                                            </Text>
+                                        ))
+                                    ) : (
+                                        <Text style={estilos.noTimeText}>Sem horários disponíveis hoje!</Text>
+                                    )
+                                }
+                            </View>
+                        </View>
+
+
+                    </TouchableOpacity>
                 )}
                 contentContainerStyle={estilos.listContent}
                 showsVerticalScrollIndicator={false}

@@ -59,6 +59,7 @@ export default function App() {
         <Stack.Screen name="SelecaoPerfil" component={SelecaoPerfil} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Drawer" component={DrawerNavigator} />
+        <Stack.Screen name="ResultadosBusca" component={ResultadosBusca} />
       </Stack.Navigator>
     </NavigationContainer>
   );

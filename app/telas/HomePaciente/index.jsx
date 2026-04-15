@@ -2,8 +2,9 @@ import { Feather, FontAwesome, Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import FiltroModal from "../../componentes/FiltroModal";
 
 const RECOMENDACOES = [
     { id: '1', nome: 'Carolina Vasconcelos', especialidade: 'Nutricionista', avaliacao: '5.0', reviews: '120', favorito: true, avatar: 'https://i.pravatar.cc/150?img=1' },
@@ -14,10 +15,49 @@ const RECOMENDACOES = [
 
 const NOTAS = [1, 2, 3, 4, 5];
 
+const MOCK_PROFISSIONAIS = [
+  { id: '1', nome: 'Fábio Almeida', especialidade: 'Psicologia', avaliacao: '5.0', reviews: '83', pagamento: 'Particular', consulta: 'R$ 250,00', modalidade: 'Online', favorito: false, avatar: 'https://i.pravatar.cc/150?img=33' },
+  { id: '2', nome: 'Anna Borges', especialidade: 'Psicologia', avaliacao: '5.0', reviews: '73', pagamento: 'Particular', consulta: 'R$ 200,00', modalidade: 'Online e Presencial', favorito: false, avatar: 'https://i.pravatar.cc/150?img=47' },
+  { id: '3', nome: 'Carolina Vasconcelos', especialidade: 'Nutricionista', avaliacao: '5.0', reviews: '120', pagamento: 'Plano de Saúde', consulta: '-', modalidade: 'Presencial', favorito: true, avatar: 'https://i.pravatar.cc/150?img=1' },
+  { id: '4', nome: 'Diogo Braga', especialidade: 'Clínico geral', avaliacao: '4.9', reviews: '115', pagamento: 'Particular', consulta: 'R$ 150,00', modalidade: 'Online', favorito: true, avatar: 'https://i.pravatar.cc/150?img=8' },
+];
+
 export default function HomePaciente() {
     const navigation = useNavigation();
 
     const [usuario, setUsuario] = useState(null);
+
+    const [modalVisivel, setModalVisivel] = useState(false);
+
+    const handleFiltrarBusca = (filtros) => {
+        setModalVisivel(false);     // Oculta o modal
+
+        const resultadosFiltrados = MOCK_PROFISSIONAIS.filter((medico) => {
+            let match = true;
+
+            if (filtros.especialidade && filtros.especialidade !== medico.especialidade) {
+                match = false;
+            }
+
+            if (filtros.tipoConsulta && filtros.tipoConsulta !== 'Ambos') {
+                if (!medico.modalidade.includes(filtros.tipoConsulta)) {
+                    match = false;
+                }
+            }
+
+            if (filtros.nome && !medico.nome.toLowerCase().includes(filtros.nome.toLowerCase())) {
+                match = false;
+            }
+
+            if (filtros.pagamento && medico.pagamento !== filtros.pagamento) {
+                match = false;
+            }
+
+            return match;
+        })
+
+        navigation.navigate('ResultadosBusca', { resultados: resultadosFiltrados });
+    }
 
     useEffect(() => {
         const carregarUsuario = async () => {
@@ -91,25 +131,32 @@ export default function HomePaciente() {
                         </View>
 
                         <Text style={estilos.sectionTitle}>Em busca de um profissional?</Text>
-                        <View style={estilos.searchContainer}>
+
+                        <TouchableOpacity 
+                            style={estilos.searchContainer}
+                            activeOpacity={0.8}
+                            onPress={() => setModalVisivel(true)}
+                        >
                             <Ionicons
                                 name="search"
                                 size={20}
                                 color={"#0063C7"}
                                 style={estilos.searchIcon}
                             />
-                            <TextInput
-                                style={estilos.searchInput}
-                                placeholder="Encontre sua especialidade desejada"
-                                placeholderTextColor={"#999"}
-                            />
-                        </View>
+                            <Text style={estilos.searchText}>Encontre sua especialidade desejada</Text>
+                        </TouchableOpacity>
 
                         <Text style={estilos.subTitle}>Recomendações</Text>
                     </>
                 )}
                 contentContainerStyle={estilos.listContent}
                 showsVerticalScrollIndicator={false}
+            />
+
+            <FiltroModal 
+                visivel={modalVisivel}
+                aoFechar={() => setModalVisivel(false)}
+                aoBuscar={handleFiltrarBusca}
             />
         </SafeAreaView>
     );
@@ -123,9 +170,9 @@ const estilos = StyleSheet.create({
     greetingName: { fontWeight: 'bold' },
     profilePic: { width: 45, height: 45, borderRadius: 22.5 },
     sectionTitle: { fontSize: 18, fontWeight: 'bold', color: '#333', marginBottom: 15 },
-    searchContainer: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#FFF', borderRadius: 10, paddingHorizontal: 15, paddingVertical: 12, borderWidth: 1, borderColor: '#EEE', marginBottom: 25 },
+    searchContainer: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#FFF', borderRadius: 10, paddingHorizontal: 15, paddingVertical: 12, borderWidth: 1, borderColor: '#EEE', marginBottom: 15 },
     searchIcon: { marginRight: 10 },
-    searchInput: { flex: 1, fontSize: 14, color: '#333' },
+    searchText: { flex: 1, fontSize: 14, color: '#999' },
     subTitle: { fontSize: 14, fontWeight: '600', color: '#333', marginBottom: 15 },
     card: { flexDirection: 'row', backgroundColor: '#FFF', borderRadius: 12, padding: 15, marginBottom: 15, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.05, shadowRadius: 5, elevation: 2 },
     cardImage: { width: 60, height: 60, borderRadius: 10, marginRight: 15 },

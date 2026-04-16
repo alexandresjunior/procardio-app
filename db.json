@@ -1,0 +1,12 @@
+{
+  "usuarios": [
+    { "id": "1", "email": "victor@teste.com", "senha": "123", "nome": "Victor Araujo", "sexo": "M" },
+    { "id": "2", "email": "maria@teste.com", "senha": "123", "nome": "Maria Silva", "sexo": "F" }
+  ],
+  "profissionais": [
+    { "id": "1", "nome": "Fábio Almeida", "especialidade": "Psicologia", "avaliacao": "5.0", "reviews": "83", "pagamento": "Particular", "consulta": "R$ 250,00", "modalidade": "Online", "favorito": false, "avatar": "https://i.pravatar.cc/150?img=33" },
+    { "id": "2", "nome": "Anna Borges", "especialidade": "Psicologia", "avaliacao": "5.0", "reviews": "73", "pagamento": "Particular", "consulta": "R$ 200,00", "modalidade": "Online e Presencial", "favorito": false, "avatar": "https://i.pravatar.cc/150?img=47" },
+    { "id": "3", "nome": "Carolina Vasconcelos", "especialidade": "Nutricionista", "avaliacao": "5.0", "reviews": "120", "pagamento": "Plano de Saúde", "consulta": "-", "modalidade": "Presencial", "favorito": true, "avatar": "https://i.pravatar.cc/150?img=1" },
+    { "id": "4", "nome": "Diogo Braga", "especialidade": "Clínico geral", "avaliacao": "4.9", "reviews": "115", "pagamento": "Particular", "consulta": "R$ 150,00", "modalidade": "Online", "favorito": true, "avatar": "https://i.pravatar.cc/150?img=8" }
+  ]
+}

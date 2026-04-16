@@ -1,7 +1,7 @@
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Alert,
   Image,
@@ -18,12 +18,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import googleLogo from "../../../assets/images/google_logo.png";
 import logoBranco from "../../../assets/images/procardio_logo_vertical_branco.png";
 import logoVermelho from "../../../assets/images/procardio_logo_vertical_vermelho.png";
-
-const MOCK_USERS = [
-  { id: '1', email: 'victor@teste.com', senha: '123', nome: 'Victor Araujo', sexo: 'M' },
-  { id: '2', email: 'maria@teste.com', senha: '123', nome: 'Maria Silva', sexo: 'F' },
-  { id: '3', email: 'pro@teste.com', senha: '123', nome: 'Dr. Carlos', sexo: 'M' }
-];
+import { listarUsuarios } from "../../servicos/usuarios";
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -35,13 +30,19 @@ export default function Login() {
   const perfil = route.params?.perfil || "paciente";
   const ehProfissional = perfil === "profissional";
 
+  const [usuarios, setUsuarios] = useState([]);
+
+  useEffect(() => {
+    listarUsuarios(setUsuarios);
+  }, []);
+
   const handleLogin = async () => {
     if (!email || !senha) {
       Alert.alert('Atenção', 'Por favor, preencha o e-mail e a senha.');
       return;
     }
 
-    const usuarioEncontrado = MOCK_USERS.find((u) => u.email.toLowerCase() === email.toLowerCase() && u.senha === senha);
+    const usuarioEncontrado = usuarios.find((u) => u.email.toLowerCase() === email.toLowerCase() && u.senha === senha);
 
     if (usuarioEncontrado) {
       try {

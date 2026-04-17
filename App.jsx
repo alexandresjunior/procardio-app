@@ -6,6 +6,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import MenuLateral from "./app/componentes/MenuLateral";
 import HomePaciente from "./app/telas/HomePaciente";
 import Login from "./app/telas/Login";
+import PerfilProfissional from "./app/telas/PerfilProfissional";
 import ResultadosBusca from "./app/telas/ResultadosBusca";
 import SelecaoPerfil from "./app/telas/SelecaoPerfil";
 
@@ -32,6 +33,7 @@ function TabNavigator() {
         headerShown: false
        })}
     >
+      { /** TODO: Incluir as telas 'children' de HomePaciente */}
       <Tab.Screen name="HomePaciente" component={HomePaciente} options={{ tabBarLabel: "Home" }} />
       {/* TEMPORÁRIO */}
       <Tab.Screen name="Mensagens" component={ResultadosBusca} />
@@ -60,6 +62,7 @@ export default function App() {
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Drawer" component={DrawerNavigator} />
         <Stack.Screen name="ResultadosBusca" component={ResultadosBusca} />
+        <Stack.Screen name="PerfilProfissional" component={PerfilProfissional} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,41 +1,11 @@
 import { Feather, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useNavigation } from "@react-navigation/native";
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { GlobalContext } from "../../contextos/GlobalContext";
 import { tema } from "../../tema";
 
 export default function MenuLateral() {
-    const navigation = useNavigation();
-
-    const [usuario, setUsuario] = useState(null);
-
-    // TODO: Isolar lógica em um contexto global
-    useEffect(() => {
-        const carregarUsuario = async () => {
-            try {
-                const usuarioLogado = await AsyncStorage.getItem('@procardio_user');
-
-                if (usuarioLogado !== null) {
-                    setUsuario(JSON.parse(usuarioLogado));
-                }
-            } catch (erro) {
-                console.error('Erro ao carregar dados do usuário: ' + erro);
-            }
-        }
-
-        carregarUsuario();
-    }, []);
-
-    const handleSair = async () => {
-        try {
-            await AsyncStorage.removeItem('@procardio_user');
-
-            navigation.navigate('SelecaoPerfil');
-        } catch (erro) {
-            console.error('Erro ao remover dados do usuário: ' + erro);
-        }
-    }
+    const { usuario, signOut } = useContext(GlobalContext);
 
     return (
         <View style={estilos.container}>
@@ -62,7 +32,7 @@ export default function MenuLateral() {
                 <MenuItem
                     icon={"log-out-outline"}
                     label={"Sair"}
-                    action={handleSair}
+                    action={signOut}
                     IconComponent={Ionicons}
                 />
             </View>
@@ -88,17 +58,17 @@ const estilos = StyleSheet.create({
     },
     profileSection: { marginBottom: 40, alignItems: 'center', alignSelf: 'flex-start' },
     profilePic: { width: 60, height: 60, borderRadius: 30, marginBottom: 10 },
-    profileName: { 
-        fontSize: 16, 
-        fontWeight: 'bold', 
+    profileName: {
+        fontSize: 16,
+        fontWeight: 'bold',
         color: tema.colors.text
     },
     menuItemsList: { flex: 1 },
     drawerItem: { flexDirection: 'row', alignItems: 'center', paddingVertical: 15 },
     itemIcon: { marginRight: 20, width: 25, textAlign: 'center' },
-    itemText: { 
-        fontSize: 15, 
-        color: tema.colors.text 
+    itemText: {
+        fontSize: 15,
+        color: tema.colors.text
     },
     footer: { paddingTop: 10, paddingBottom: 30 },
 });

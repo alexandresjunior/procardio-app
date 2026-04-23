@@ -4,6 +4,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import MenuLateral from "./app/componentes/MenuLateral";
+import { GlobalProvider } from "./app/contextos/GlobalContext";
 import HomePaciente from "./app/telas/HomePaciente";
 import Login from "./app/telas/Login";
 import PerfilProfissional from "./app/telas/PerfilProfissional";
@@ -58,13 +59,15 @@ function DrawerNavigator() {
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="SelecaoPerfil" screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="SelecaoPerfil" component={SelecaoPerfil} />
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Drawer" component={DrawerNavigator} />
-        <Stack.Screen name="ResultadosBusca" component={ResultadosBusca} />
-        <Stack.Screen name="PerfilProfissional" component={PerfilProfissional} />
-      </Stack.Navigator>
+      <GlobalProvider>
+        <Stack.Navigator initialRouteName="SelecaoPerfil" screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="SelecaoPerfil" component={SelecaoPerfil} />
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Drawer" component={DrawerNavigator} />
+          <Stack.Screen name="ResultadosBusca" component={ResultadosBusca} />
+          <Stack.Screen name="PerfilProfissional" component={PerfilProfissional} />
+        </Stack.Navigator>
+      </GlobalProvider>
     </NavigationContainer>
   );
 }

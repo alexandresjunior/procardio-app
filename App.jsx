@@ -9,6 +9,7 @@ import Login from "./app/telas/Login";
 import PerfilProfissional from "./app/telas/PerfilProfissional";
 import ResultadosBusca from "./app/telas/ResultadosBusca";
 import SelecaoPerfil from "./app/telas/SelecaoPerfil";
+import { tema } from "./app/tema";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -28,8 +29,8 @@ function TabNavigator() {
 
           return <Ionicons name={iconName} size={size} color={color} />
         },
-        tabBarActiveTintColor: "#0063c7",
-        tabBarInactiveTintColor: "#666",
+        tabBarActiveTintColor: tema.colors.primary,
+        tabBarInactiveTintColor: tema.colors.light,
         headerShown: false
        })}
     >

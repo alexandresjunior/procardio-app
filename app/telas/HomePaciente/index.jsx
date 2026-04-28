@@ -8,8 +8,6 @@ import FiltroModal from "../../componentes/FiltroModal";
 import NotaEstrela from "../../componentes/NotaEstrela";
 import { listarProfissionais } from "../../servicos/profissionais";
 
-const NOTAS = [1, 2, 3, 4, 5];
-
 export default function HomePaciente() {
     const navigation = useNavigation();
 

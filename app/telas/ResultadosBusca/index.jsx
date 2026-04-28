@@ -1,9 +1,10 @@
-import { FontAwesome, Ionicons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import * as Print from 'expo-print';
 import { useNavigation } from "expo-router";
 import * as Sharing from 'expo-sharing';
 import { Alert, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import NotaEstrela from "../../componentes/NotaEstrela";
 
 const RESULTADOS = [
     { id: '1', nome: 'Fábio Almeida', especialidade: 'Psicólogo', avaliacao: '5.0', reviews: '83', pagamento: 'Particular', consulta: 'R$ 250,00', modalidade: 'Online', favorito: false, avatar: 'https://i.pravatar.cc/150?img=33', data: 'Terça 14 - Dezembro', horarios: ['11:00', '12:00'] },
@@ -112,9 +113,7 @@ export default function ResultadosBusca() {
                                 <Text style={estilos.cardSpecialty}>{item.especialidade}</Text>
 
                                 <View style={estilos.ratingContainer}>
-                                    { [1, 2, 3, 4, 5].map((estrela) => (
-                                        <FontAwesome key={estrela} name="star" size={12} color={"#FFD700"} />
-                                    )) }
+                                    <NotaEstrela nota={item.avaliacao} />
                                     <Text style={estilos.ratingText}>{item.avaliacao} | {item.reviews} avaliações</Text>
                                 </View>
 

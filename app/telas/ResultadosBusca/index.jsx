@@ -1,7 +1,8 @@
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
+import * as Print from 'expo-print';
 import { useNavigation } from "expo-router";
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-
+import * as Sharing from 'expo-sharing';
+import { Alert, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const RESULTADOS = [
@@ -13,6 +14,58 @@ const RESULTADOS = [
 export default function ResultadosBusca() {
     const navigation = useNavigation();
 
+    const gerarPDF = async () => {
+        try {
+            const linhasTabela = RESULTADOS.map((medico) => (
+                `
+                    <tr>
+                        <td>${medico.nome}</td>
+                        <td>${medico.especialidade}</td>
+                        <td>${medico.consulta}</td>
+                    </tr>
+                `
+            )).join('');
+
+            const conteudoHTML = `
+                <html>
+                    <head>
+                        <style>
+                            body { font-family: Arial; padding: 20px; }
+                            h1 { color: #0056b3; }
+                            table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                            th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+                            th { background-color: #f2f2f2; }
+                        </style>
+                    </head>
+                    <body>
+                        <h1>Relatório de Profissionais</h1>
+                        <p>Abaixo estão os resultados da sua busca:</p>
+                        <table>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Especialidade</th>
+                                <th>Valor</th>
+                            </tr>
+                            ${linhasTabela}
+                        </table>
+                    </body>
+                </html>
+            `;
+
+            const { uri } = await Print.printToFileAsync({ html: conteudoHTML });
+
+            const compDisp = await Sharing.isAvailableAsync();
+
+            if (compDisp) {
+                await Sharing.shareAsync(uri);
+            } else {
+                Alert.alert('Erro', 'O compartilhamento não está disponível neste dispositivo.');
+            }
+        } catch (erro) {
+            Alert.alert('Erro', 'Não foi possível gerar o PDF: ' + erro);
+        }
+    }
+
     return (
         <SafeAreaView style={estilos.container}>
             <View style={estilos.header}>
@@ -21,6 +74,19 @@ export default function ResultadosBusca() {
                 </TouchableOpacity>
                 <Text style={estilos.headerTitle}>Busca por psicólogos</Text>
                 <View style={{ width: 28 }}></View>
+            </View>
+
+            <View style={{ padding: 20 }}>
+                <TouchableOpacity style={{ 
+                    backgroundColor: "#FF3B30", 
+                    padding: 15, 
+                    borderRadius: 8, 
+                    alignItems: 'center' 
+                }}
+                onPress={gerarPDF}
+                >
+                    <Text style={{ color: "#FFF", fontWeight: 'bold' }}>Exportar resultados em PDF</Text>
+                </TouchableOpacity>
             </View>
 
             <FlatList

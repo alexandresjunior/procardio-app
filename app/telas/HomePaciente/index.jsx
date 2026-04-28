@@ -1,10 +1,11 @@
-import { Feather, FontAwesome, Ionicons } from "@expo/vector-icons";
+import { Feather, Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FiltroModal from "../../componentes/FiltroModal";
+import NotaEstrela from "../../componentes/NotaEstrela";
 import { listarProfissionais } from "../../servicos/profissionais";
 
 const NOTAS = [1, 2, 3, 4, 5];
@@ -90,14 +91,7 @@ export default function HomePaciente() {
                             </View>
                             <Text style={estilos.cardSpecialty}>{item.especialidade}</Text>
                             <View style={estilos.ratingContainer}>
-                                {NOTAS.map((nota) => (
-                                    <FontAwesome
-                                        key={nota}
-                                        name="star"
-                                        size={12}
-                                        color={"#FFD700"}
-                                    />
-                                ))}
+                                <NotaEstrela nota={item.avaliacao} />
                                 <Text style={estilos.ratingText}>
                                     {item.avaliacao} | {item.reviews} avaliações
                                 </Text>
